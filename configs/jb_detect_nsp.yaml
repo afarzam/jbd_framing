@@ -1,0 +1,28 @@
+# ------------------------------------------------------------
+#  Generic options
+# ------------------------------------------------------------
+experiment:
+  seed: 42                 # keep identical to training for reproducibility
+  mixed_precision: fp16    # passed to torch.cuda if you ever enable it
+
+# ------------------------------------------------------------
+#  Dataset paths  (ID vs. OOD variants)
+# ------------------------------------------------------------
+data:
+  input_path_varyFraming_id: ./data/populated_artifacts/PAIR/id/all_populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_id: ./data/populated_artifacts/PAIR/id/all_cleaned_populated_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+  input_path_varyFraming_benign_id: ./data/populated_benign_JBB-behaviors/PAIR/id/populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_benign_id: ./data/populated_benign_JBB-behaviors/PAIR/id/cleaned_populated_benign_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+  input_path_varyFraming_ood: ./data/populated_artifacts/PAIR/ood/all_populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_ood: ./data/populated_artifacts/PAIR/ood/all_cleaned_populated_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+  input_path_varyFraming_benign_ood: ./data/populated_benign_JBB-behaviors/PAIR/ood/populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_benign_ood: ./data/populated_benign_JBB-behaviors/PAIR/ood/cleaned_populated_benign_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+
+# ------------------------------------------------------------
+#  NSP detector settings
+# ------------------------------------------------------------
+detector:
+  alphas: [0.7, 0.9]        # PCA variance-retain levels
+  n_calib: 100              # size of calibration subset per split
+  detect_via_framing: true  # true → framing vectors, false → goal vectors
+  candidate_layers: all     # "all" or a list of integers

@@ -1,0 +1,64 @@
+experiment:
+  seed: 42
+  use_sae: false
+
+data:
+  input_path_varyFraming: ./data/populated_artifacts/PAIR/id/all_populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal: ./data/populated_artifacts/PAIR/id/all_cleaned_populated_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+  input_path_varyFraming_benign: ./data/populated_benign_JBB-behaviors/PAIR/id/populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_benign: ./data/populated_benign_JBB-behaviors/PAIR/id/cleaned_populated_benign_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+  test_framing_index: 0  # Use framing_index=0 for testing
+  train_framing_indices: [1,2,3,4,5]  # Use these framing indices for training
+
+model:
+  name: lmsys/vicuna-13b-v1.5 # google/gemma-2-2b # meta-llama/Meta-Llama-3-8B-Instruct #meta-llama/Llama-2-7b-chat-hf
+  device: auto  # or "cuda" / "cpu"
+  access_token: YOUR_HUGGING_FACE_TOKEN_HERE
+  max_length: 4096
+  max_new_tokens: 512
+  num_labels: 2  # For decomposer model (e.g., binary classification)
+
+goal_extraction:
+  max_new_tokens: 256
+
+frame_decomposition:
+  max_new_tokens: 1024
+
+training:
+  batch_size: 8
+  num_epochs: 3
+  save_steps: 500
+  logging_steps: 100
+  learning_rate: 2e-5
+  train_test_split: 0.8  # 80% train, 20% validation
+
+output:
+  decomposer_dir: output/decomposer_llm
+  decomposer_model: output/decomposer_llm/final_model
+  results_json: output/decomposer_llm/results.json
+
+
+
+# encoder
+encoder_ckpt: "meta-llama/Meta-Llama-3-8B-Instruct"
+device: "cuda"
+
+# projection sizes
+d_g: 512
+d_f: 512
+
+# losses
+lambda_adv: 2
+lambda_g: .5
+lambda_f: 4.0
+lambda_orth: 0.5
+lambda_repuls: 6.0
+
+# optimization
+epochs: 3
+batch_size: 16
+lr: 1.0e-4
+warmup_steps: 500
+grad_clip: 1.0
+
+save_dir: "checkpoints/decomposer"

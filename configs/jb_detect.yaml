@@ -1,0 +1,39 @@
+# ------------------------------------------------------------
+#  Generic options
+# ------------------------------------------------------------
+experiment:
+  seed: 42                 # keep identical to training for reproducibility
+  mixed_precision: fp16    # (ignored by these scripts, but harmless)
+
+model:
+  name: "meta-llama/Llama-2-7b-chat-hf" # or "lmsys/vicuna-7b-v1.5"
+  access_token: YOUR_HUGGING_FACE_TOKEN_HERE
+  device: auto
+  max_length: 4096          # passed to tokenizer if you ever enable it
+  max_new_tokens: 512
+  layer_combine: mean       # notebook default when unspecified
+  last_token: false         # notebook forces False
+  layers: all               # 'all' for all layers, or a list of layer indices 
+
+# ------------------------------------------------------------
+#  Dataset paths  (ID vs. OOD variants)
+# ------------------------------------------------------------
+data:
+  input_path_varyFraming_id:         ./data/populated_artifacts/PAIR/id/all_populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_id:            ./data/populated_artifacts/PAIR/id/all_cleaned_populated_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+  input_path_varyFraming_benign_id:  ./data/populated_benign_JBB-behaviors/PAIR/id/populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_benign_id:     ./data/populated_benign_JBB-behaviors/PAIR/id/cleaned_populated_benign_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+
+  input_path_varyFraming_ood:        ./data/populated_artifacts/PAIR/ood/all_populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_ood:           ./data/populated_artifacts/PAIR/ood/all_cleaned_populated_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+  input_path_varyFraming_benign_ood: ./data/populated_benign_JBB-behaviors/PAIR/ood/populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_benign_ood:    ./data/populated_benign_JBB-behaviors/PAIR/ood/cleaned_populated_benign_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+
+# ------------------------------------------------------------
+#  NSP detector-specific (ignored by JBShield)
+# ------------------------------------------------------------
+detector:
+  alphas: [0.7, 0.9]        # PCA variance-retain levels
+  n_calib: 100
+  detect_via_framing: true  # true → framing vectors, false → goal vectors
+  candidate_layers: all

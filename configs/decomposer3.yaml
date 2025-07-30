@@ -1,0 +1,82 @@
+# ------------------------------------------------------------
+#  Global experiment options
+# ------------------------------------------------------------
+experiment:
+  seed: 42
+  use_sae: false            # left unchanged
+
+# ------------------------------------------------------------
+#  Dataset paths
+# ------------------------------------------------------------
+data:
+  input_path_varyFraming:        ./data/populated_artifacts/PAIR/id/all_populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal:           ./data/populated_artifacts/PAIR/id/all_cleaned_populated_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+  input_path_varyFraming_benign: ./data/populated_benign_JBB-behaviors/PAIR/id/populated_prompts_gpt4.1_paraphrases10_maxattempts5_noParaphrase.jsonl
+  input_path_varyGoal_benign:    ./data/populated_benign_JBB-behaviors/PAIR/id/cleaned_populated_benign_prompts_gpt4.1_goals10_maxattempts5_noParaphrase.jsonl
+  test_framing_index: 0
+  train_framing_indices: [1, 2, 3, 4, 5]
+
+# ------------------------------------------------------------
+#  LLM encoder (frozen)
+# ------------------------------------------------------------
+model:
+  name: meta-llama/Llama-2-7b-chat-hf # "meta-llama/Meta-Llama-3-8B-Instruct"
+  access_token: YOUR_HUGGING_FACE_TOKEN_HERE
+  device: auto
+  max_length: 4096          # passed to tokenizer if needed
+  max_new_tokens: 512
+  layer_combine: mean       # notebook default when unspecified
+  last_token: false         # notebook forces False
+  layers: all               # 'all' for all layers, or a list of layer indices (e.g. [0, 1, 2])
+  # layers will be filled programmatically with [0 … num_layers-1]
+
+# ------------------------------------------------------------
+#  Training hyper-parameters (notebook hard-coded)
+# ------------------------------------------------------------
+training:
+  batch_size: 8
+  num_epochs: 3
+  learning_rate: 2.0e-5     # *not used* (lr comes from root → keep for clarity)
+  save_steps: 500
+  logging_steps: 100
+  train_test_split: 0.8
+  grad_accum_steps: 8
+
+# ------------------------------------------------------------
+#  Output folders (master run-ID will be inserted at runtime)
+# ------------------------------------------------------------
+output:
+  logs_dir: logs
+  checkpoints_root: checkpoints/decomposer_simple
+  config_snapshot_dir: output
+
+# ------------------------------------------------------------
+#  Decomposer / optimisation (root-level keys accessed by code)
+# ------------------------------------------------------------
+#  – encoder projection sizes
+d_g: 512
+d_f: 512
+hidden_dim: 1024
+dropout: 0.1
+
+#  – losses  (note: lambda_orth will be *×10* inside the code)
+lambda_adv: 2.0
+lambda_g: 0.5
+lambda_f: 4.0
+lambda_orth: 0.5
+lambda_repulse: 6.0          # typo fixed (was lambda_repuls)
+lambda_Worth: 0.05           # added – default notebook value
+lambda_sparse: null          # placeholder
+lambda_recon: 1.0
+lambda_null_center: 0.2
+lambda_goal_align: 0.2
+lambda_frame_push: 0.1
+
+#  – optimiser / schedule
+lr: 1.0e-4
+warmup_steps: 500
+grad_clip: 1.0
+grad_accum_steps: 8
+
+# misc
+device: cuda

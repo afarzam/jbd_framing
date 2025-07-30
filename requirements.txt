@@ -1,0 +1,42 @@
+# Core ML packages
+torch
+torchvision
+transformers
+peft
+accelerate
+bitsandbytes
+einops
+
+# Data processing and scientific computing
+numpy
+scipy
+scikit-learn
+datasets
+pandas
+
+# Visualization and plotting
+matplotlib
+Pillow
+seaborn
+plotly
+kaleido
+
+# LLM specific
+openai
+anthropic
+langchain
+sentencepiece
+protobuf
+
+# Utilities
+pyyaml==6.0.1
+tqdm==4.66.2
+wandb
+pytest
+black
+isort
+flake8
+
+# Jailbreak
+litellm==1.29.1
+jailbreakbench==1.0.0
